@@ -1,0 +1,48 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ['20.x']
+        os: [ubuntu-latest, macOS-latest]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
+
+      - run: bun install
+
+      - name: Lint
+        run: bun lint
+
+      - name: Test
+        run: chmod -R 777 test && bun test
+        env:
+          LOCAL_APIKEY: ${{ secrets.LOCAL_APIKEY }}
+
+      - name: Build
+        run: bun run build
+
+  # coverage:
+  #   name: coverage
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+    
+  #     - uses: oven-sh/setup-bun@v1
+
+  #     - run: bun install
+  #     - run: chmod -R 777 test && bun test
+  #       env:
+  #         LOCAL_APIKEY: ${{ secrets.LOCAL_APIKEY }}
+  #     - uses: paambaati/codeclimate-action@v6.0.0
+  #       env:
+  #         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+  #       with:
+  #         debug: true
