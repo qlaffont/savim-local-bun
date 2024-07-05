@@ -79,7 +79,7 @@
     "typescript": "5.5.3"
   },
   "dependencies": {
-    "savim": "1.2.172"
+    "savim": "1.2.173"
   },
   "packageManager": "yarn@1.22.22"
 }
